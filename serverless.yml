@@ -1,12 +1,11 @@
-service: graphql-dynamodb
 
-frameworkVersion: '2'
+service: graphql-dynamodb-pt1
 
 provider:
   name: aws
   runtime: nodejs12.x
   environment:
-    HEROES_TABLE: HEROES_TABLE
+    HEROES_TABLE: Heroes
     SKILLS_TABLE: Skills
     LOCALSTACK_HOST: ${env:LOCALSTACK_HOST, "localhost"}
     DYNAMODB_PORT: ${env:DYNAMODB_PORT, "4566"}
@@ -44,11 +43,12 @@ custom:
       heroes:
         sources:
           - table: ${self:provider.environment.HEROES_TABLE}
-            sources: ['./seed/heroes.json']
+            sources: [ './seed/heroes.json' ]
       skills:
         sources:
           - table: ${self:provider.environment.SKILLS_TABLE}
-            sources: ['./seed/skills.json']
+            sources: [ './seed/skills.json' ]
+
 
 functions:
   hello:
@@ -63,16 +63,16 @@ resources:
     Heroes:
       Type: AWS::DynamoDB::Table
       Properties:
-      TableName: ${self:provider.environment.HEROES_TABLE}
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
-          KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.HEROES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
     Skills:
       Type: AWS::DynamoDB::Table
       Properties:
